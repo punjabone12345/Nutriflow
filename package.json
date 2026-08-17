@@ -1,0 +1,11 @@
+{
+  "name": "nutriflow-push-reminders",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Standalone Netlify scheduled function that sends FCM Web Push reminders for NutriFlow.",
+  "dependencies": {
+    "firebase-admin": "^12.1.0",
+    "@netlify/blobs": "^8.0.0"
+  }
+}
