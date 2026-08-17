@@ -1,0 +1,38 @@
+# Netlify config for the standalone NutriFlow reminder service.
+# Deploy this FOLDER as its own Netlify site (separate from the Base44 app).
+
+[build]
+  functions = "functions"
+
+[functions]
+  # Netlify will bundle each function's ESM imports automatically.
+  node_bundler = "esbuild"
+
+# Scheduled reminder sender — runs every 5 minutes (UTC cron).
+# The function converts UTC now → each user's stored IANA timezone before
+# checking which reminders are due, so timing stays local per user.
+[functions.send-reminders]
+  schedule = "*/5 * * * *"
+
+# Friendly URL redirects so the app can call /sync, /unregister, /test-push
+# instead of /.netlify/functions/...
+[[redirects]]
+  from = "/sync"
+  to = "/.netlify/functions/sync"
+  status = 200
+
+[[redirects]]
+  from = "/unregister"
+  to = "/.netlify/functions/unregister"
+  status = 200
+
+[[redirects]]
+  from = "/test-push"
+  to = "/.netlify/functions/test-push"
+  status = 200
+
+# Let the scheduled function be triggered manually for testing via its URL.
+[[redirects]]
+  from = "/send-reminders"
+  to = "/.netlify/functions/send-reminders"
+  status = 200
