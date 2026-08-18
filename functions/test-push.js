@@ -1,11 +1,9 @@
 import { sendPush } from "../lib/fcm-admin.js";
-import { corsHeaders, preflight, json, checkAuth } from "../lib/cors.js";
+import { corsHeaders, preflight, json } from "../lib/cors.js";
 
 export default async function (req) {
   if (req.method === "OPTIONS") return preflight();
   if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
-  const authErr = checkAuth(req);
-  if (authErr) return json({ error: authErr }, 401);
 
   let body;
   try {
@@ -17,6 +15,9 @@ export default async function (req) {
   const { token } = body;
   if (!token) return json({ error: "Missing token" }, 400);
 
+  // sendPush goes through Firebase Admin, which rejects an invalid token —
+  // so only the device that holds this token can target it. No shared secret
+  // is sent from the browser.
   try {
     await sendPush(token, {
       title: "NutriFlow test 🧪",
