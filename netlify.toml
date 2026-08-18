@@ -7,7 +7,6 @@
 [functions]
   # Netlify will bundle each function's ESM imports automatically.
   node_bundler = "esbuild"
-  external_node_modules = ["@netlify/blobs","firebase-admin"]
 
 # Scheduled reminder sender — runs every 5 minutes (UTC cron).
 # The function converts UTC now → each user's stored IANA timezone before
